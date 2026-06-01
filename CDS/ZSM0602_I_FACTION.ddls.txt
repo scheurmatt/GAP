@@ -1,0 +1,15 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Faction View'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZSM0602_I_FACTION as select from zsm0602_t_fact
+{
+   key faction_id,
+  faction_name,
+  faction_size   
+}

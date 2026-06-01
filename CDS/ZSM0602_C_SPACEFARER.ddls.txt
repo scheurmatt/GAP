@@ -1,0 +1,95 @@
+@EndUserText.label: 'Spacefarer Projection'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+
+@UI.headerInfo: {
+  typeName: 'Spacefarer',
+  typeNamePlural: 'Spacefarers',
+  title: { value: 'name' }
+}
+
+
+define root view entity ZSM0602_C_SPACEFARER
+  provider contract transactional_query as projection on ZSM0602_I_SPACEFARER
+{
+
+  @UI.facet: [
+    {
+      id: 'General',
+      type: #FIELDGROUP_REFERENCE,
+      label: 'General',
+      targetQualifier: 'GENERAL'
+    },
+      {
+    id: 'Collections',
+    type: #LINEITEM_REFERENCE,
+    label: 'Stardust Collection',
+    targetElement: '_Collection'
+  }
+  ]
+  
+  
+    key spacefarer_uuid,
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 10 }]
+  @EndUserText.label: 'Name'
+  name,
+
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 20 }]
+    @EndUserText.label: 'Navigation Skill'
+    
+  
+  navigation_skill,
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 30 }]
+  @EndUserText.label: 'Reputation'
+  
+  reputation,
+
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 40 }]
+    @EndUserText.label: 'Origin Planet'
+    
+  
+  origin_planet,
+
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 50 }]
+    @EndUserText.label: 'Spacesuit Color'
+    
+  
+  spacesuit_color,
+
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 60 }]
+  @EndUserText.label: 'Credits'
+  
+  credits,
+  
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 70 }]
+    @EndUserText.label: 'Currency'
+    
+  
+  currency_code,
+  
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+    @UI.fieldGroup: [{ qualifier: 'GENERAL', position: 80 }]
+    @EndUserText.label: 'Faction'
+    
+  
+  faction_id,
+  _Faction,
+  _Collection
+  
+}

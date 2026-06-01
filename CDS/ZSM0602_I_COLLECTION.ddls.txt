@@ -1,0 +1,18 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Collection View'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZSM0602_I_COLLECTION as select from zsm0602_t_col
+{
+  key collection_uuid,
+  spacefarer_uuid,
+    @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @EndUserText.label: 'Collection Name'
+  collection_name    
+}

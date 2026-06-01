@@ -1,0 +1,7 @@
+@EndUserText.label: 'GAP Service Definition'
+define service ZSM0602_SD_GAP {
+  expose ZSM0602_C_SPACEFARER;
+  expose ZSM0602_I_SF_WEALTH;
+  expose ZSM0602_I_FACTION;
+  expose ZSM0602_I_COLLECTION;
+}

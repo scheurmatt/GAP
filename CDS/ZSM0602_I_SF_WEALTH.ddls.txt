@@ -1,0 +1,27 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Wealth View'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZSM0602_I_SF_WEALTH as select from zsm0602_t_sfarer as sf
+
+  left outer join zsm0602_t_sdust as sd
+    on sd.owner_uuid = sf.spacefarer_uuid
+{
+   key sf.spacefarer_uuid,
+      sf.name,
+      @Semantics.amount.currencyCode: 'currency_code'
+      sf.credits,
+      sf.currency_code,
+
+    @Semantics.amount.currencyCode: 'currency_code'
+      sum( sd.value ) as stardust_value,
+
+    @Semantics.amount.currencyCode: 'currency_code'
+      ( sf.credits + sum( sd.value ) ) as total_wealth
+}
+group by sf.spacefarer_uuid, sf.name, sf.credits, sf.currency_code

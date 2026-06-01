@@ -1,0 +1,25 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Spacefarer Interface View'
+
+define root view entity ZSM0602_I_SPACEFARER
+  as select from zsm0602_t_sfarer
+    association [0..1] to ZSM0602_I_FACTION as _Faction
+    on _Faction.faction_id = zsm0602_t_sfarer.faction_id
+    association [0..*] to ZSM0602_I_COLLECTION as _Collection
+  on _Collection.spacefarer_uuid = zsm0602_t_sfarer.spacefarer_uuid
+{
+
+  key spacefarer_uuid,
+  name,
+  navigation_skill,
+  reputation,
+  origin_planet,
+  spacesuit_color,
+  credits,
+  currency_code,
+  faction_id,
+  last_changed_at,
+  _Faction,
+  _Collection
+}
+

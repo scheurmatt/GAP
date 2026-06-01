@@ -1,0 +1,23 @@
+managed implementation in class zbp_sm0602_i_spacefarer unique;
+with draft;
+
+define behavior for ZSM0602_I_SPACEFARER
+persistent table zsm0602_t_sfarer
+draft table zsm0602_d_sfarer
+lock master total etag last_changed_at
+authorization master ( instance )
+etag master last_changed_at
+{
+  create;
+  update;
+  delete;
+
+  field ( readonly ) spacefarer_uuid;
+  field ( numbering : managed ) spacefarer_uuid;
+
+  validation validate_reputation on save
+  {
+    create;
+    update;
+  }
+}
