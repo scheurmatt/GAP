@@ -1,0 +1,27 @@
+FUNCTION z_sm_gap_refine_fm
+  IMPORTING
+    iv_uuid TYPE sysuuid_x16.
+
+
+
+    DATA lv_new_value TYPE zdk0602_t_sdust-value.
+  DATA lv_uuid TYPE sysuuid_x16.
+  lv_uuid = iv_uuid.
+
+  SELECT SINGLE value FROM zdk0602_t_sdust
+    INTO @DATA(lv_old_value)
+    WHERE stardust_uuid = @lv_uuid.
+
+  DATA(lo_rand) = cl_abap_random_int=>create(
+  seed = CONV i( sy-uzeit )
+  min  = 0
+  max  = 20 ).
+  DATA(lv_bonus) = 5 + lo_rand->get_next( ).
+
+  lv_new_value = lv_old_value * ( 1 + lv_bonus / 100 ).
+
+  UPDATE zdk0602_t_sdust
+    SET value = lv_new_value
+    WHERE stardust_uuid = lv_uuid.
+
+ENDFUNCTION.
