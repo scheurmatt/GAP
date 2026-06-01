@@ -1,0 +1,22 @@
+@EndUserText.label : 'Spacefarer Draft'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #ALLOWED
+define table zsm0602_d_sfarer {
+
+  key client          : abap.clnt not null;
+  key spacefarer_uuid : sysuuid_x16 not null;
+  name                : abap.char(50);
+  navigation_skill    : abap.int4;
+  reputation          : abap.int4;
+  origin_planet       : abap.char(40);
+  spacesuit_color     : abap.char(20);
+  currency_code       : abap.cuky;
+  @Semantics.amount.currencyCode : 'zsm0602_d_sfarer.currency_code'
+  credits             : abap.curr(15,2);
+  faction_id          : abap.char(10);
+  last_changed_at     : timestampl;
+  "%admin"            : include sych_bdl_draft_admin_inc;
+
+}
