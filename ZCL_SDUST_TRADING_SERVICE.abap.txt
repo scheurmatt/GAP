@@ -1,0 +1,111 @@
+CLASS zcl_sdust_trading_service DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC.
+
+  PUBLIC SECTION.
+
+    METHODS:
+      calculate_price
+        IMPORTING
+          iv_base_price   TYPE zdk0602_t_sdust-value
+          iv_reputation   TYPE i
+        RETURNING VALUE(rv_price) TYPE zdk0602_t_sdust-value,
+
+      buy_stardust
+        IMPORTING
+          iv_stardust_uuid TYPE sysuuid_x16
+          iv_buyer_uuid    TYPE sysuuid_x16,
+
+      sell_stardust
+        IMPORTING
+          iv_stardust_uuid TYPE sysuuid_x16
+          iv_seller_uuid   TYPE sysuuid_x16,
+
+      exchange_stardust
+      importing
+      iv_stardust_uuid TYPE sysuuid_x16
+      iv_to_uuid type sysuuid_x16
+      iv_from_uuid type sysuuid_x16.
+
+  PRIVATE SECTION.
+
+ENDCLASS.
+
+CLASS zcl_sdust_trading_service IMPLEMENTATION.
+
+  METHOD calculate_price.
+
+    DATA(lv_diff) = iv_reputation - 30.
+
+    rv_price = iv_base_price.
+
+    IF lv_diff > 0.
+      rv_price = rv_price * ( 1 - ( lv_diff / 5 * '0.01' ) ).
+    ELSEIF lv_diff < 0.
+      rv_price = rv_price * ( 1 + ( abs( lv_diff ) / 5 * '0.01' ) ).
+    ENDIF.
+
+  ENDMETHOD.
+
+    METHOD buy_stardust.
+
+    CALL FUNCTION 'ENQUEUE_EZSDUST'
+      EXPORTING
+        stardust_uuid = iv_stardust_uuid.
+
+    SELECT SINGLE * FROM zdk0602_t_sdust
+      WHERE stardust_uuid = @iv_stardust_uuid
+      INTO @DATA(ls_sdust).
+
+    DATA(lv_price) = calculate_price(
+      iv_base_price = ls_sdust-value
+      iv_reputation = 30
+    ).
+
+    UPDATE zdk0602_t_sdust
+      SET owner_uuid = iv_buyer_uuid
+      WHERE stardust_uuid = iv_stardust_uuid.
+
+    COMMIT WORK.
+
+    CALL FUNCTION 'DEQUEUE_EZSDUST'.
+
+  ENDMETHOD.
+
+    METHOD sell_stardust.
+
+    data: lv_owner_uuid type sysuuid_x16.
+
+    CLEAR lv_owner_uuid.
+
+    CALL FUNCTION 'ENQUEUE_EZSDUST'
+      EXPORTING
+        stardust_uuid = iv_stardust_uuid.
+
+    UPDATE zdk0602_t_sdust
+      SET owner_uuid = lv_owner_uuid
+      WHERE stardust_uuid = iv_stardust_uuid.
+
+    COMMIT WORK.
+
+    CALL FUNCTION 'DEQUEUE_EZSDUST'.
+
+  ENDMETHOD.
+
+  METHOD exchange_stardust.
+
+  CALL FUNCTION 'ENQUEUE_EZSDUST'
+    EXPORTING stardust_uuid = iv_stardust_uuid.
+
+  UPDATE zdk0602_t_sdust
+    SET owner_uuid = iv_to_uuid
+    WHERE stardust_uuid = iv_stardust_uuid
+      AND owner_uuid = iv_from_uuid.
+
+  CALL FUNCTION 'DEQUEUE_EZSDUST'.
+
+ENDMETHOD.
+
+
+  endclass.
